@@ -1,17 +1,7 @@
--- INITIALIZING DATABASE --
-
-CREATE TABLE IF NOT EXISTS customer(
-	customer_id SERIAL PRIMARY KEY,
-	first_name VARCHAR(50),
-	last_name VARCHAR(50),
-	email VARCHAR(50),
-	address VARCHAR(50),
-	city VARCHAR(50),
-	state VARCHAR(2)
-);
+-- INITIALIZING DATABASE...
 
 
--- TABLES CREATED:
+-- TABLES BEING CREATED...
 -- invoice (X)
 -- salesperson (X)
 -- mechanic (X)
@@ -19,7 +9,7 @@ CREATE TABLE IF NOT EXISTS customer(
 -- sesrvice_appt (X)
 -- car_purchased (X)
 -- customer (X)
--- car_on_lot
+-- car_on_lot (X)
 -- mechanic_invoice
 
 
@@ -29,11 +19,6 @@ CREATE TABLE IF NOT EXISTS invoice(
 	invoice_type VARCHAR,
 	description TEXT,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	--fk: customer_id
-	--fk: car_purchased
-	--fk: salesperson_id
-	--fk: mechani_id
-	--fk: service_ticket_id
 );
 
 CREATE TABLE IF NOT EXISTS salesperson( 
@@ -88,8 +73,78 @@ CREATE TABLE IF NOT EXISTS car_on_lot(
 	last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);
 	
-	
-	
-	
-	
-	
+-- TABLES ADDED
+
+-- FOREIGN KEYS BEING ADDED... 
+
+ALTER TABLE invoice ADD COLUMN IF NOT EXISTS customer_id INTEGER NOT NULL;
+ALTER TABLE invoice ADD COLUMN IF NOT EXISTS car_purchased_id INTEGER;
+ALTER TABLE invoice ADD COLUMN IF NOT EXISTS salesperson_id INTEGER NOT NULL;
+ALTER TABLE invoice ADD COLUMN IF NOT EXISTS mechanic_id INTEGER;
+ALTER TABLE invoice ADD COLUMN IF NOT EXISTS service_ticket_id INTEGER;
+
+ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS customer_id INTEGER NOT NULL;
+ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS invoice_id INTEGER NOT NULL;
+ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS mechanic_id INTEGER NOT NULL;
+ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS salesperson_id INTEGER NOT NULL;
+
+-- FOREIGN KEYS BEING ASSIGNED...
+
+-- invoice Table:
+	--fk: customer_id
+ALTER TABLE invoice
+ADD FOREIGN KEY(customer_id) REFERENCES customer(customer_id);
+
+	--fk: car_purchased
+ALTER TABLE invoice 
+ADD FOREIGN KEY(car_purchased_id) REFERENCES car_purchased(car_purchased_id); 
+
+	--fk: salesperson_id
+ALTER TABLE invoice 
+ADD FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id); 
+
+	--fk: mechanic_id
+ALTER TABLE invoice 
+ADD FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id); 
+
+	--fk: service_ticket_id
+ALTER TABLE invoice 
+ADD FOREIGN KEY(service_ticket_id) REFERENCES service_ticket(service_ticket_id); 
+
+-- service_ticket Table:
+	--fk: customer_id
+ALTER TABLE service_ticket 
+ADD FOREIGN KEY(customer_id) REFERENCES customer(customer_id);
+
+	--fk: invoice_id
+ALTER TABLE service_ticket 
+ADD FOREIGN KEY(invoice_id) REFERENCES invoice(invoice_id);
+
+	--fk: mechanic_id
+ALTER TABLE service_ticket 
+ADD FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id);
+
+	--fk: salesperson_id
+ALTER TABLE service_ticket 
+ADD FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id);
+
+	 
+
+
+
+
+
+
+-- service_appt Table:
+	--fk: service_ticket_id 
+
+
+-- car_purchased Table:
+	--fk: car_on_lot_id
+	--fk: customer_id
+	--fk: invoice_id
+	--fk salesperson_id
+
+
+-- customer Table:
+	--fk: car_purchased_id
