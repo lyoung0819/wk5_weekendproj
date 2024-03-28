@@ -35,25 +35,16 @@ CREATE TABLE IF NOT EXISTS mechanic(
 
 CREATE TABLE IF NOT EXISTS service_ticket( 
 	service_ticket_id SERIAL PRIMARY KEY
-	--fk: customer_id
-	--fk: invoice_id
-	--fk: mechanic_id
-	--fk: salesperson_id
 );
 
 CREATE TABLE IF NOT EXISTS service_appt( 
 	service_appt_id SERIAL PRIMARY KEY,
 	appt_occured BOOLEAN NOT NULL
-	--fk: service_ticket_id 
 );
 
 CREATE TABLE IF NOT EXISTS car_purchased(
 	car_purchased_id SERIAL PRIMARY KEY,
 	date_purchased TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-	--fk: car_on_lot_id
-	--fk: customer_id
-	--fk: invoice_id
-	--fk salesperson_id
 );
 
 CREATE TABLE IF NOT EXISTS customer(
@@ -87,6 +78,16 @@ ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS customer_id INTEGER NOT NULL
 ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS invoice_id INTEGER NOT NULL;
 ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS mechanic_id INTEGER NOT NULL;
 ALTER TABLE service_ticket ADD COLUMN IF NOT EXISTS salesperson_id INTEGER NOT NULL;
+
+ALTER TABLE service_appt ADD COLUMN IF NOT EXISTS service_ticket_id INTEGER;
+
+ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS car_on_lot_id INTEGER;
+ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS customer_id INTEGER NOT NULL;
+ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS invoice_id INTEGER NOT NULL;
+ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS salesperson_id INTEGER NOT NULL;
+
+
+
 
 -- FOREIGN KEYS BEING ASSIGNED...
 
@@ -128,22 +129,27 @@ ADD FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id);
 ALTER TABLE service_ticket 
 ADD FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id);
 
-	 
-
-
-
-
-
 
 -- service_appt Table:
 	--fk: service_ticket_id 
+ALTER TABLE service_appt 
+ADD FOREIGN KEY(service_ticket_id) REFERENCES service_ticket(service_ticket_id);
 
 
 -- car_purchased Table:
 	--fk: car_on_lot_id
+ALTER TABLE car_purchased
+ADD FOREIGN KEY(car_on_lot_id) REFERENCES car_on_lot(car_on_lot_id);
 	--fk: customer_id
+ALTER TABLE car_purchased
+ADD FOREIGN KEY(customer_id) REFERENCES customer(customer_id);
 	--fk: invoice_id
+ALTER TABLE car_purchased
+ADD FOREIGN KEY(invoice_id) REFERENCES invoice(invoice_id);
 	--fk salesperson_id
+ALTER TABLE car_purchased
+ADD FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id);
+
 
 
 -- customer Table:
