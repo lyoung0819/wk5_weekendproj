@@ -51,7 +51,6 @@ CREATE TABLE IF NOT EXISTS customer(
 	customer_id SERIAL PRIMARY KEY,
 	customer_first_name VARCHAR,
 	customer_last_name VARCHAR
-	--fk: car_purchased_id
 );
 
 CREATE TABLE IF NOT EXISTS car_on_lot( 
@@ -86,8 +85,7 @@ ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS customer_id INTEGER NOT NULL;
 ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS invoice_id INTEGER NOT NULL;
 ALTER TABLE car_purchased ADD COLUMN IF NOT EXISTS salesperson_id INTEGER NOT NULL;
 
-
-
+ALTER TABLE customer ADD COLUMN IF NOT EXISTS car_purchased_id INTEGER;
 
 -- FOREIGN KEYS BEING ASSIGNED...
 
@@ -129,12 +127,10 @@ ADD FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id);
 ALTER TABLE service_ticket 
 ADD FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id);
 
-
 -- service_appt Table:
 	--fk: service_ticket_id 
 ALTER TABLE service_appt 
 ADD FOREIGN KEY(service_ticket_id) REFERENCES service_ticket(service_ticket_id);
-
 
 -- car_purchased Table:
 	--fk: car_on_lot_id
@@ -150,7 +146,14 @@ ADD FOREIGN KEY(invoice_id) REFERENCES invoice(invoice_id);
 ALTER TABLE car_purchased
 ADD FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id);
 
-
-
 -- customer Table:
 	--fk: car_purchased_id
+ALTER TABLE customer 
+ADD FOREIGN KEY(car_purchased_id) REFERENCES car_purchased(car_purchased_id);
+
+
+-- Altering car year to allow a single year via integer
+ALTER TABLE car_on_lot ADD COLUMN car_year INTEGER;
+
+-- Altering invoice amount to allow for XXX,XXX.XX values
+ALTER TABLE invoice ALTER COLUMN invoice_amount TYPE NUMERIC(8,2);
