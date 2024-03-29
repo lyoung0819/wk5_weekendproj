@@ -11,10 +11,7 @@
 -- >> STORED FUNCTIONS << 
 -- 1. Look up: how many cars there are of a certain make
 -- 2. Look up: service history by ticket_id OR appt_id
--- 3. Loop up: customer info from car purchased 
--- 4. Look up: car info from customer 
--- 5. Look up: mechanics who worked on any given invoice
--- 6. Look up: salesperson who helped with car purchase
+
 
 -----------------------------------------------------------------------------------
 -- STORED PROCEDURES: 
