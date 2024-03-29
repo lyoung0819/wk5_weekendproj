@@ -15,7 +15,7 @@
 
 CREATE TABLE IF NOT EXISTS invoice(
 	invoice_id SERIAL PRIMARY KEY,
-	invoice_amount NUMERIC(5,2) NOT NULL,
+	invoice_amount NUMERIC(8,2) NOT NULL,
 	invoice_type VARCHAR,
 	description TEXT,
 	date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS car_on_lot(
 	car_on_lot_id SERIAL PRIMARY KEY,
 	car_make VARCHAR NOT NULL,
 	car_model VARCHAR NOT NULL,
-	car_year DATE NOT NULL,
+	car_year INTEGER NOT NULL,
 	car_color VARCHAR NOT NULL,
 	purchase_pending BOOLEAN NOT NULL,
 	last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -159,3 +159,7 @@ ALTER TABLE car_on_lot ADD COLUMN car_year INTEGER;
 ALTER TABLE invoice ALTER COLUMN invoice_amount TYPE NUMERIC(8,2);
 
 
+-- Changing Invoice column car_purchased_id & fkey to car_on_lot_id fkey 
+ALTER TABLE invoice DROP CONSTRAINT invoice_car_purchased_id_fkey;
+ALTER TABLE invoice RENAME COLUMN car_purchased_id TO car_on_lot_id;
+ALTER TABLE invoice ADD FOREIGN KEY(car_on_lot_id) REFERENCES car_on_lot(car_on_lot_id);
